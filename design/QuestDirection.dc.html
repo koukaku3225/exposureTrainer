@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+  <style>
+    body { margin: 0; background: #1f2a3a; font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif; color: #f4efe3; }
+    a { color: #f2a65a; } a:hover { color: #f7c28c; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: radial-gradient(circle at 80% 10%, #2d3d55 0, #1f2a3a 55%); display: flex; flex-direction: column;">
+  <div style="flex-grow: 1; padding: 52px 20px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 12px; color: #9fb0c8;">クエスト</div>
+        <div style="font-size: 24px; font-weight: 800;">人前で話す</div>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+        <div style="font-size: 20px; font-weight: 800; color: #f2a65a;">34 pt</div>
+        <div style="width: 110px; height: 8px; background: #33445e; border-radius: 4px; display: flex;"><div style="width: 68%; background: #f2a65a; border-radius: 4px;"></div></div>
+        <div style="font-size: 11px; color: #9fb0c8;">50ptで 新しい服</div>
+      </div>
+    </div>
+
+    <div style="position: relative; height: 330px;">
+      <svg width="350" height="330" viewBox="0 0 350 330" style="position: absolute; left: 0; top: 0;" fill="none">
+        <path d="M40 300 C 120 300, 120 250, 175 240 S 290 200, 300 170 S 190 120, 120 110 S 90 50, 200 30" stroke="#3f5575" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 12"></path>
+      </svg>
+      <div style="position: absolute; left: 20px; top: 280px; width: 40px; height: 40px; border-radius: 20px; background: #5fb3a1; color: #1f2a3a; display: flex; align-items: center; justify-content: center; font-weight: 800;">1</div>
+      <div style="position: absolute; left: 155px; top: 220px; width: 40px; height: 40px; border-radius: 20px; background: #5fb3a1; color: #1f2a3a; display: flex; align-items: center; justify-content: center; font-weight: 800;">2</div>
+      <div style="position: absolute; left: 272px; top: 142px; width: 56px; height: 56px; border-radius: 28px; background: #f2a65a; color: #1f2a3a; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; box-shadow: 0 0 0 6px rgba(242,166,90,0.25);">3</div>
+      <div style="position: absolute; left: 100px; top: 90px; width: 40px; height: 40px; border-radius: 20px; background: #33445e; color: #9fb0c8; display: flex; align-items: center; justify-content: center; font-weight: 800;">4</div>
+      <div style="position: absolute; left: 180px; top: 10px; width: 40px; height: 40px; border-radius: 20px; background: #33445e; color: #9fb0c8; display: flex; align-items: center; justify-content: center; font-weight: 800;">5</div>
+      <div style="position: absolute; left: 236px; top: 16px; font-size: 12px; color: #9fb0c8;">… 10 100人の前で話す</div>
+    </div>
+
+    <div style="background: #2a3950; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-size: 12px; color: #f2a65a; font-weight: 700;">いまのステージ　難しさ3</div>
+      <div style="font-size: 19px; font-weight: 800;">会議で一言だけ発言する</div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="width: 28px; height: 28px; border-radius: 14px; background: #5fb3a1;"></div>
+        <div style="width: 28px; height: 28px; border-radius: 14px; background: #5fb3a1;"></div>
+        <div style="width: 28px; height: 28px; border-radius: 14px; border: 2px dashed #9fb0c8; box-sizing: border-box;"></div>
+        <div style="font-size: 13px; color: #9fb0c8; margin-left: 6px;">あと1回でクリア判定</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; height: 56px; background: #f2a65a; color: #1f2a3a; border-radius: 28px; font-size: 17px; font-weight: 800;">挑戦する</div>
+  </div>
+
+  <div style="height: 76px; background: #18212e; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding-bottom: 12px; box-sizing: border-box;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #f2a65a; font-size: 11px; font-weight: 700;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11l8-6 8 6v8h-5v-5H9v5H4z"></path></svg>ホーム</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #7d8ea8; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19h5v-4h5v-4h6"></path></svg>マップ</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #7d8ea8; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4h12v16H6z"></path><path d="M9 9h6M9 13h6"></path></svg>記録</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #7d8ea8; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18l5-6 4 3 7-9"></path></svg>振り返り</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #7d8ea8; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3"></path></svg>設定</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

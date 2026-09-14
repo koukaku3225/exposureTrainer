@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #f5f6f5; font-family: "IBM Plex Sans JP", "Hiragino Sans", sans-serif; color: #151716; }
+    a { color: #2f7a57; } a:hover { color: #1f5a3f; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #f5f6f5; display: flex; flex-direction: column;">
+  <div style="flex-grow: 1; padding: 48px 16px 0; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #151716; padding-bottom: 8px;">
+      <div style="font-size: 18px; font-weight: 700;">EXPOSURE LOG</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5c615e;">2026-09-14 MON</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: #d3d7d4; border: 1px solid #d3d7d4;">
+      <div style="background: #fff; padding: 10px; display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 11px; color: #5c615e;">今週</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px;">5<span style="font-size: 12px;"> 回</span></div>
+      </div>
+      <div style="background: #fff; padding: 10px; display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 11px; color: #5c615e;">不安の平均低下</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; color: #2f7a57;">−2.4</div>
+      </div>
+      <div style="background: #fff; padding: 10px; display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 11px; color: #5c615e;">ポイント</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px;">34<span style="font-size: 12px;">/50</span></div>
+      </div>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #d3d7d4; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #5c615e;">
+        <div>人前で話す ／ 難しさ 3</div>
+        <div style="font-family: 'IBM Plex Mono', monospace;">2/3 回</div>
+      </div>
+      <div style="font-size: 18px; font-weight: 700;">会議で一言だけ発言する</div>
+      <svg width="356" height="110" viewBox="0 0 356 110" fill="none">
+        <path d="M0 10H356M0 50H356M0 90H356" stroke="#eceeec"></path>
+        <path d="M0 74H356" stroke="#2f7a57" stroke-dasharray="3 3"></path>
+        <text x="300" y="70" font-size="10" fill="#2f7a57" font-family="IBM Plex Mono">目安 3</text>
+        <path d="M30 22 L 170 30 L 310 42" stroke="#9aa19d" stroke-width="2"></path>
+        <path d="M30 46 L 170 58 L 310 66" stroke="#151716" stroke-width="2"></path>
+        <circle cx="30" cy="22" r="3.5" fill="#9aa19d"></circle><circle cx="170" cy="30" r="3.5" fill="#9aa19d"></circle><circle cx="310" cy="42" r="3.5" fill="#9aa19d"></circle>
+        <circle cx="30" cy="46" r="3.5" fill="#151716"></circle><circle cx="170" cy="58" r="3.5" fill="#151716"></circle><circle cx="310" cy="66" r="3.5" fill="#151716"></circle>
+      </svg>
+      <div style="display: flex; gap: 16px; font-size: 11px; color: #5c615e;">
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 14px; height: 2px; background: #9aa19d;"></div>始める前</div>
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 14px; height: 2px; background: #151716;"></div>終わった後</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; border: 1px solid #d3d7d4; background: #fff;">
+      <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) 56px; padding: 8px 12px; font-size: 11px; color: #5c615e; border-bottom: 1px solid #d3d7d4;"><div>難</div><div>課題</div><div>回数</div></div>
+      <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) 56px; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #eceeec; color: #5c615e;"><div style="font-family: 'IBM Plex Mono', monospace;">2</div><div>録画して見返す</div><div style="font-family: 'IBM Plex Mono', monospace;">4 済</div></div>
+      <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) 56px; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #eceeec; font-weight: 700;"><div style="font-family: 'IBM Plex Mono', monospace;">3</div><div>会議で一言だけ発言</div><div style="font-family: 'IBM Plex Mono', monospace;">2</div></div>
+      <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) 56px; padding: 10px 12px; font-size: 13px;"><div style="font-family: 'IBM Plex Mono', monospace;">4</div><div>2〜3人の前で3分話す</div><div style="font-family: 'IBM Plex Mono', monospace;">0</div></div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; height: 52px; background: #151716; color: #fff; font-size: 15px; font-weight: 700;">＋ 実践を記録</div>
+  </div>
+
+  <div style="height: 72px; border-top: 1px solid #d3d7d4; background: #fff; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding-bottom: 10px; box-sizing: border-box;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #151716; font-size: 11px; font-weight: 700;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11l8-6 8 6v8h-5v-5H9v5H4z"></path></svg>ホーム</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8b918d; font-size: 11px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h5v-4h5v-4h6"></path></svg>段階表</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8b918d; font-size: 11px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16H6z"></path><path d="M9 9h6M9 13h6"></path></svg>記録</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8b918d; font-size: 11px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18l5-6 4 3 7-9"></path></svg>振り返り</div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8b918d; font-size: 11px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3"></path></svg>設定</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
