@@ -75,10 +75,7 @@ export const THEME_TEMPLATES: ThemeTemplate[] = [
   },
 ];
 
-export function instantiateTheme(
-  template: ThemeTemplate,
-  clearRequirement: { count: number; maxAnxietyAfter: number },
-): Theme {
+export function instantiateTheme(template: ThemeTemplate): Theme {
   const now = new Date().toISOString();
   const stages: Stage[] = template.stages.map((s, i) => ({
     id: crypto.randomUUID(),
@@ -86,7 +83,6 @@ export function instantiateTheme(
     name: s.name,
     status: i === 0 ? 'now' : 'todo',
     order: i,
-    clearRequirement,
   }));
   return {
     id: crypto.randomUUID(),

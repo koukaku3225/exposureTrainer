@@ -63,7 +63,6 @@ describe('isStageLocked', () => {
     name: '難しい段',
     status: 'todo',
     order: 8,
-    clearRequirement: { count: 3, maxAnxietyAfter: 3 },
     ...over,
   });
   const theme = (over: Partial<Theme>): Theme => ({

@@ -4,7 +4,8 @@ export type Stage = {
   name: string;
   status: 'todo' | 'now' | 'clear';
   order: number;
-  clearRequirement: { count: number; maxAnxietyAfter: number };
+  // 進級目安（count・maxAnxietyAfter）はテーマ側に複製しない。
+  // 常に Settings.clearRequirement を参照する（設定変更が既存テーマにも効くように）。
 };
 
 export type Theme = {

@@ -1,7 +1,9 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { AnxietyScale } from '@/components/ui/AnxietyScale';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { useTheme } from '@/lib/useTheme';
@@ -19,16 +21,38 @@ export default function PracticePage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
   const { theme, records, refresh } = useTheme(id);
-  const [before, setBefore] = useState(5);
-  const [after, setAfter] = useState(5);
+  const [before, setBefore] = useState<number | null>(null);
+  const [after, setAfter] = useState<number | null>(null);
   const [isImagined, setIsImagined] = useState(false);
   const [saved, setSaved] = useState<PracticeRecord | null>(null);
 
   if (!theme) return null;
   const now = theme.stages.find((s) => s.status === 'now');
-  if (!now) return null;
+  const settings = readSettings();
+
+  // 全段クリア済み、あるいはテーマ作成直後で挑戦中の段がない場合は、
+  // 白紙にせず案内を出してテーマ詳細に戻れるようにする。
+  if (!now) {
+    return (
+      <div className="min-h-screen flex flex-col bg-cream">
+        <div className="flex-grow px-4 pt-11 pb-2 flex flex-col gap-3.5">
+          <div className="text-xl font-extrabold">実践を記録</div>
+          <Card>
+            <div className="text-sm leading-relaxed">
+              「{theme.name}」はいま挑戦中の段がありません。全段クリアしているか、まだ段が設定されていません。
+            </div>
+            <Link href={`/themes/${id}`}>
+              <Button variant="secondary">テーマの詳細に戻る</Button>
+            </Link>
+          </Card>
+        </div>
+        <BottomNav active="practice" themeId={id} practiceEnabled={false} />
+      </div>
+    );
+  }
 
   function save() {
+    if (before === null || after === null) return;
     const record: PracticeRecord = {
       id: crypto.randomUUID(),
       themeId: id,
@@ -68,14 +92,15 @@ export default function PracticePage({ params }: { params: { id: string } }) {
       writeList(STORAGE_KEYS.themes, nextThemes);
     }
 
-    const settings = readSettings();
-    writeSettings({ ...settings, points: settings.points + 5 });
+    const currentSettings = readSettings();
+    writeSettings({ ...currentSettings, points: currentSettings.points + 5 });
 
     router.push(`/themes/${id}`);
   }
 
+  const canSave = before !== null && after !== null;
   const willClear = saved
-    ? meetsClearRequirement([...records, saved], now.id, now.clearRequirement)
+    ? meetsClearRequirement([...records, saved], now.id, settings.clearRequirement)
     : false;
 
   return (
@@ -113,9 +138,10 @@ export default function PracticePage({ params }: { params: { id: string } }) {
             <button
               type="button"
               onClick={save}
-              className="h-[46px] rounded-[14px] bg-coral text-white font-extrabold"
+              disabled={!canSave}
+              className="h-[46px] rounded-[14px] bg-coral text-white font-extrabold disabled:opacity-40"
             >
-              記録する
+              {canSave ? '記録する' : '不安のスコアを2つとも選んでください'}
             </button>
           </Card>
         ) : (

@@ -3,13 +3,16 @@ import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { BottomNav } from '@/components/ui/BottomNav';
+import { IfThenEditor } from '@/components/IfThenEditor';
 import { useTheme } from '@/lib/useTheme';
+import { readSettings } from '@/lib/storage';
 
 export default function ThemeDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const { theme, records } = useTheme(id);
+  const { theme, records, refresh } = useTheme(id);
 
   if (!theme) return null;
+  const settings = readSettings();
   const now = theme.stages.find((s) => s.status === 'now');
   const lastRecordForNow = now
     ? [...records]
@@ -34,19 +37,14 @@ export default function ThemeDetailPage({ params }: { params: { id: string } }) 
               </div>
               <div className="flex flex-col gap-0.5">
                 <div className="text-[11.5px] font-bold text-coral">
-                  いまのステージ・{countForNow}/{now.clearRequirement.count}回
+                  いまのステージ・{countForNow}/{settings.clearRequirement.count}回
                 </div>
                 <div className="text-[14.5px] font-extrabold">{now.name}</div>
               </div>
             </div>
           </Card>
         )}
-        {theme.ifThen && (
-          <div className="bg-[#fff4e9] border-[1.5px] border-dashed border-[#ffcda3] rounded-2xl px-3.5 py-3 text-[12.5px] leading-relaxed">
-            <span className="text-dim">次の一歩：</span>
-            <b>{theme.ifThen.trigger}</b> になったら → <b className="text-coral-dark">{theme.ifThen.action}</b>
-          </div>
-        )}
+        <IfThenEditor themeId={id} ifThen={theme.ifThen} onSaved={refresh} />
         {!now && (
           <Card>
             <div className="text-sm">このテーマは全段クリアしました。おめでとうございます！</div>
@@ -68,7 +66,7 @@ export default function ThemeDetailPage({ params }: { params: { id: string } }) 
           </div>
         )}
       </div>
-      <BottomNav active="home" themeId={id} />
+      <BottomNav active="home" themeId={id} practiceEnabled={!!now} />
     </div>
   );
 }

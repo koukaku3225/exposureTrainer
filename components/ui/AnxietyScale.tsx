@@ -4,12 +4,15 @@ export function AnxietyScale({
   onChange,
 }: {
   label: string;
-  value: number;
+  value: number | null;
   onChange: (n: number) => void;
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-[13px] text-dim font-bold">{label}</div>
+      <div className="text-[13px] text-dim font-bold">
+        {label}
+        {value === null && <span className="text-coral"> ・未選択</span>}
+      </div>
       <div className="flex gap-1">
         {Array.from({ length: 11 }, (_, n) => (
           <button

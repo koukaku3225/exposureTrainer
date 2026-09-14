@@ -25,9 +25,8 @@ export default function HomePage() {
   function addTheme(templateId: string) {
     const template = THEME_TEMPLATES.find((t) => t.id === templateId);
     if (!template) return;
-    const settings = readSettings();
     const current = readList<Theme>(STORAGE_KEYS.themes);
-    const created = instantiateTheme(template, settings.clearRequirement);
+    const created = instantiateTheme(template);
     const next = [...current, created];
     writeList(STORAGE_KEYS.themes, next);
     setThemes(next);
