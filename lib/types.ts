@@ -2,6 +2,9 @@ export type Stage = {
   id: string;
   level: number;
   name: string;
+  // 段階表に出す代表的な課題名（name）とは別に、実践のときに選べる
+  // 課題のバリエーションを最大3件まで自由に持てる。空文字は「未入力の枠」。
+  tasks: string[];
   status: 'todo' | 'now' | 'clear';
   order: number;
   // 進級目安（count・maxAnxietyAfter）はテーマ側に複製しない。

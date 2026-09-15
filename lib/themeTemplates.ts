@@ -81,6 +81,8 @@ export function instantiateTheme(template: ThemeTemplate): Theme {
     id: crypto.randomUUID(),
     level: s.level,
     name: s.name,
+    // 同梱テンプレートの課題を1枠目に入れ、残り2枠は自分で自由に追加できるよう空けておく。
+    tasks: [s.name, '', ''],
     status: i === 0 ? 'now' : 'todo',
     order: i,
   }));

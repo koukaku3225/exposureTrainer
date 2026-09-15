@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { BottomNav } from '@/components/ui/BottomNav';
+import { TaskEditor } from '@/components/TaskEditor';
 import { useTheme } from '@/lib/useTheme';
 import { isStageLocked, retreatOneStage } from '@/lib/progression';
+import { getTaskOptions } from '@/lib/tasks';
 import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
 import type { Theme } from '@/lib/types';
 
@@ -12,6 +14,7 @@ export default function LadderPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const { theme, records, refresh } = useTheme(id);
   const [confirmingRetreat, setConfirmingRetreat] = useState(false);
+  const [expandedStageId, setExpandedStageId] = useState<string | null>(null);
   if (!theme) return null;
   const settings = readSettings();
   const sorted = [...theme.stages].sort((a, b) => a.order - b.order);
@@ -29,7 +32,7 @@ export default function LadderPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <div className="flex-grow px-4 pt-11 pb-2 flex flex-col gap-3">
+      <div className="flex-grow px-4 pt-11 pb-2 flex flex-col gap-3 overflow-y-auto">
         <div>
           <div className="text-xs text-dim font-bold">難しさ順に下から上へ</div>
           <div className="text-xl font-extrabold">{theme.name} の段階表</div>
@@ -37,28 +40,43 @@ export default function LadderPage({ params }: { params: { id: string } }) {
         <Card>
           {sorted.map((stage) => {
             const locked = isStageLocked(stage, theme, records, settings.guardrailThreshold);
+            const expanded = expandedStageId === stage.id;
+            const taskCount = getTaskOptions(stage).length;
             return (
-              <div
-                key={stage.id}
-                className="grid grid-cols-[30px_1fr_auto] items-center gap-2.5 py-2 border-t border-black/5 first:border-t-0"
-              >
-                <div className="text-sm font-black text-center text-amber-dark">{stage.level}</div>
-                <div
-                  className={`text-[13.5px] ${stage.status === 'clear' ? 'text-dim' : ''} ${
-                    stage.status === 'now' ? 'font-bold' : ''
-                  }`}
+              <div key={stage.id} className="border-t border-black/5 first:border-t-0 py-2">
+                <button
+                  type="button"
+                  onClick={() => setExpandedStageId(expanded ? null : stage.id)}
+                  className="w-full grid grid-cols-[30px_1fr_auto] items-center gap-2.5 text-left"
                 >
-                  {stage.name}
-                </div>
-                <div>
-                  {locked ? (
-                    <Chip tone="dim">🔒 ロック中</Chip>
-                  ) : stage.status === 'clear' ? (
-                    <Chip tone="good">クリア</Chip>
-                  ) : stage.status === 'now' ? (
-                    <Chip>挑戦中</Chip>
-                  ) : null}
-                </div>
+                  <div className="text-sm font-black text-center text-amber-dark">{stage.level}</div>
+                  <div className="flex flex-col">
+                    <div
+                      className={`text-[13.5px] ${stage.status === 'clear' ? 'text-dim' : ''} ${
+                        stage.status === 'now' ? 'font-bold' : ''
+                      }`}
+                    >
+                      {stage.name}
+                    </div>
+                    <div className="text-[11px] text-dim">
+                      課題 {taskCount}件 ・ {expanded ? '閉じる ▲' : '編集する ▼'}
+                    </div>
+                  </div>
+                  <div>
+                    {locked ? (
+                      <Chip tone="dim">🔒 ロック中</Chip>
+                    ) : stage.status === 'clear' ? (
+                      <Chip tone="good">クリア</Chip>
+                    ) : stage.status === 'now' ? (
+                      <Chip>挑戦中</Chip>
+                    ) : null}
+                  </div>
+                </button>
+                {expanded && (
+                  <div className="pt-2.5">
+                    <TaskEditor themeId={id} stageId={stage.id} tasks={stage.tasks ?? []} onSaved={refresh} />
+                  </div>
+                )}
               </div>
             );
           })}

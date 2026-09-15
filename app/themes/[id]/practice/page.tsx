@@ -8,6 +8,7 @@ import { AnxietyScale } from '@/components/ui/AnxietyScale';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { useTheme } from '@/lib/useTheme';
 import { meetsClearRequirement } from '@/lib/progression';
+import { getTaskOptions } from '@/lib/tasks';
 import { readList, writeList, readSettings, writeSettings, STORAGE_KEYS } from '@/lib/storage';
 import type { PracticeRecord, Theme } from '@/lib/types';
 
@@ -26,6 +27,7 @@ export default function PracticePage({ params }: { params: { id: string } }) {
   const [isImagined, setIsImagined] = useState(false);
   const [memo, setMemo] = useState('');
   const [saved, setSaved] = useState<PracticeRecord | null>(null);
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState(0);
 
   if (!theme) return null;
   const now = theme.stages.find((s) => s.status === 'now');
@@ -52,13 +54,17 @@ export default function PracticePage({ params }: { params: { id: string } }) {
     );
   }
 
+  const taskOptions = getTaskOptions(now);
+  const selectedTask = taskOptions[Math.min(selectedTaskIndex, taskOptions.length - 1)];
+
   function save() {
     if (before === null || after === null) return;
     const record: PracticeRecord = {
       id: crypto.randomUUID(),
       themeId: id,
       stageId: now!.id,
-      freeText: null,
+      // 3つの課題のうちどれを選んで挑んだかを残しておく
+      freeText: selectedTask,
       memo: memo.trim() || null,
       isImagined,
       anxietyBefore: before,
@@ -116,7 +122,26 @@ export default function PracticePage({ params }: { params: { id: string } }) {
               <div className="text-xs text-dim">
                 {theme.name} ／ 難しさ{now.level}
               </div>
-              <div className="text-base font-extrabold">{now.name}</div>
+              <div className="flex flex-col gap-1.5">
+                <div className="text-[13px] text-dim font-bold">今回はどれに挑みますか？</div>
+                {taskOptions.map((task, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setSelectedTaskIndex(i)}
+                    className={`text-left rounded-xl px-3 py-2.5 text-[14px] font-bold border-[1.5px] ${
+                      i === selectedTaskIndex ? 'bg-coral text-white border-coral' : 'bg-white text-ink border-track'
+                    }`}
+                  >
+                    {task}
+                  </button>
+                ))}
+                {taskOptions.length < 3 && (
+                  <Link href={`/themes/${id}/ladder`} className="text-[11.5px] text-dim underline">
+                    段階表で課題を追加する
+                  </Link>
+                )}
+              </div>
               <div className="flex gap-1.5">
                 <button
                   type="button"
@@ -165,8 +190,8 @@ export default function PracticePage({ params }: { params: { id: string } }) {
         ) : (
           <Card>
             <div className="text-[13.5px] leading-relaxed">
-              不安が <b className="text-coral">{saved.anxietyBefore - saved.anxietyAfter}</b> 下がりました。ゆうき{' '}
-              <b className="text-coral">+5pt</b>
+              「{saved.freeText}」で、不安が <b className="text-coral">{saved.anxietyBefore - saved.anxietyAfter}</b>{' '}
+              下がりました。ゆうき <b className="text-coral">+5pt</b>
               {willClear ? '。合格ラインに達しました。' : '。'}
             </div>
             <div className="text-[11.5px] text-dim font-bold">どうしますか？（どれを選んでも大丈夫です）</div>

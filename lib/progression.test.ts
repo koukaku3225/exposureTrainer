@@ -70,9 +70,9 @@ describe('isThemeUnlocked', () => {
 
 describe('retreatOneStage', () => {
   const stages: Stage[] = [
-    { id: 's1', level: 1, name: '段1', status: 'clear', order: 0 },
-    { id: 's2', level: 2, name: '段2', status: 'now', order: 1 },
-    { id: 's3', level: 3, name: '段3', status: 'todo', order: 2 },
+    { id: 's1', level: 1, name: '段1', tasks: ['段1'], status: 'clear', order: 0 },
+    { id: 's2', level: 2, name: '段2', tasks: ['段2'], status: 'now', order: 1 },
+    { id: 's3', level: 3, name: '段3', tasks: ['段3'], status: 'todo', order: 2 },
   ];
   const theme: Theme = { id: 't1', name: 'テーマ', createdAt: '', updatedAt: '', ifThen: null, stages };
 
@@ -105,6 +105,7 @@ describe('isStageLocked', () => {
     id: 's8',
     level: 8,
     name: '難しい段',
+    tasks: ['難しい段'],
     status: 'todo',
     order: 8,
     ...over,
