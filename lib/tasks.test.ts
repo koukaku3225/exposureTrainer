@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { padTasks, getTaskOptions } from './tasks';
+import { padTasks, getTaskOptions, getEditableTasks } from './tasks';
 import type { Stage } from './types';
 
 const stage = (over: Partial<Stage>): Stage => ({
@@ -40,5 +40,22 @@ describe('getTaskOptions', () => {
     // @ts-expect-error 古いデータを想定してわざと tasks を外す
     delete legacy.tasks;
     expect(getTaskOptions(legacy)).toEqual(['旧データの課題']);
+  });
+});
+
+describe('getEditableTasks', () => {
+  it('tasksがあればそのまま返す', () => {
+    expect(getEditableTasks(stage({ tasks: ['a', 'b'] }))).toEqual(['a', 'b']);
+  });
+
+  it('tasksが空配列ならnameを1枠目に補う（フォームが全空欄になるのを防ぐ）', () => {
+    expect(getEditableTasks(stage({ tasks: [], name: '元の課題' }))).toEqual(['元の課題']);
+  });
+
+  it('tasksが未定義（古いデータ）でもnameを補う', () => {
+    const legacy = stage({ name: '旧データの課題' });
+    // @ts-expect-error 古いデータを想定してわざと tasks を外す
+    delete legacy.tasks;
+    expect(getEditableTasks(legacy)).toEqual(['旧データの課題']);
   });
 });

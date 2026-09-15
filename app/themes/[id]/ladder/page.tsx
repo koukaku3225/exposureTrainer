@@ -6,7 +6,7 @@ import { BottomNav } from '@/components/ui/BottomNav';
 import { TaskEditor } from '@/components/TaskEditor';
 import { useTheme } from '@/lib/useTheme';
 import { isStageLocked, retreatOneStage } from '@/lib/progression';
-import { getTaskOptions } from '@/lib/tasks';
+import { getTaskOptions, getEditableTasks } from '@/lib/tasks';
 import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
 import type { Theme } from '@/lib/types';
 
@@ -74,7 +74,15 @@ export default function LadderPage({ params }: { params: { id: string } }) {
                 </button>
                 {expanded && (
                   <div className="pt-2.5">
-                    <TaskEditor themeId={id} stageId={stage.id} tasks={stage.tasks ?? []} onSaved={refresh} />
+                    {/* 今回の機能より前に作られたテーマは tasks を持たない。
+                        その場合、編集フォームは代表課題名（name）を1枠目に補って開く
+                        （そうしないと「課題1件」表示なのにフォームが全空欄という矛盾になる） */}
+                    <TaskEditor
+                      themeId={id}
+                      stageId={stage.id}
+                      tasks={getEditableTasks(stage)}
+                      onSaved={refresh}
+                    />
                   </div>
                 )}
               </div>

@@ -15,3 +15,11 @@ export function getTaskOptions(stage: Stage): string[] {
   const filled = (stage.tasks ?? []).map((t) => t.trim()).filter((t) => t.length > 0);
   return filled.length > 0 ? filled : [stage.name];
 }
+
+// 段階表の編集フォームを開くときの初期値。
+// tasks が無い（今回の機能より前に作られたテーマ）場合、フォームを空欄3つで
+// 開くと「課題1件」というヘッダー表示（getTaskOptionsがnameにフォールバックした結果）と
+// 矛盾するので、name を1枠目に補ってから渡す。
+export function getEditableTasks(stage: Stage): string[] {
+  return stage.tasks && stage.tasks.length > 0 ? stage.tasks : [stage.name];
+}
