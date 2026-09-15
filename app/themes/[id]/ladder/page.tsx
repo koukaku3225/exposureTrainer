@@ -1,17 +1,31 @@
 'use client';
+import { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { useTheme } from '@/lib/useTheme';
-import { isStageLocked } from '@/lib/progression';
-import { readSettings } from '@/lib/storage';
+import { isStageLocked, retreatOneStage } from '@/lib/progression';
+import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
+import type { Theme } from '@/lib/types';
 
 export default function LadderPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const { theme, records } = useTheme(id);
+  const { theme, records, refresh } = useTheme(id);
+  const [confirmingRetreat, setConfirmingRetreat] = useState(false);
   if (!theme) return null;
   const settings = readSettings();
   const sorted = [...theme.stages].sort((a, b) => a.order - b.order);
+  const nowIndex = sorted.findIndex((s) => s.status === 'now');
+  const canRetreat = nowIndex > 0;
+  const previousStage = canRetreat ? sorted[nowIndex - 1] : null;
+
+  function retreat() {
+    const themes = readList<Theme>(STORAGE_KEYS.themes);
+    const next = themes.map((t) => (t.id === id ? retreatOneStage(t) : t));
+    writeList(STORAGE_KEYS.themes, next);
+    setConfirmingRetreat(false);
+    refresh();
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
@@ -52,6 +66,41 @@ export default function LadderPage({ params }: { params: { id: string } }) {
         <div className="flex items-center gap-2 bg-[#fdf1e6] rounded-xl px-3 py-2.5 text-[11.5px] text-dim">
           🔒 難易度{settings.guardrailThreshold}以上は、直近3回を不安3以下でクリアすると解放されます
         </div>
+        {canRetreat && (
+          <Card>
+            {!confirmingRetreat ? (
+              <button
+                type="button"
+                onClick={() => setConfirmingRetreat(true)}
+                className="text-left text-[13px] text-dim underline"
+              >
+                ◀ 無理をしていたら、前の段に戻る
+              </button>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <div className="text-[13px] leading-relaxed">
+                  「{previousStage?.name}」に戻ります。いまの段はもう一度挑戦中に戻ります。
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={retreat}
+                    className="flex-grow h-10 rounded-xl bg-coral text-white text-[13px] font-bold"
+                  >
+                    前の段に戻る
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingRetreat(false)}
+                    className="h-10 px-3 rounded-xl text-[13px] font-bold text-dim"
+                  >
+                    やめる
+                  </button>
+                </div>
+              </div>
+            )}
+          </Card>
+        )}
       </div>
       <BottomNav active="ladder" themeId={id} />
     </div>

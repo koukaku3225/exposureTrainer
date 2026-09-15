@@ -1,13 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { readSettings, writeSettings } from '@/lib/storage';
+import { buildBackup, restoreBackup, isValidBackup } from '@/lib/backup';
 import type { Settings } from '@/lib/types';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setSettings(readSettings());
@@ -19,6 +22,39 @@ export default function SettingsPage() {
     const next = { ...settings!, clearRequirement: { ...settings!.clearRequirement, count } };
     writeSettings(next);
     setSettings(next);
+  }
+
+  function exportData() {
+    const backup = buildBackup();
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `exposure-trainer-backup-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(file: File) {
+    setImportError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result));
+        if (!isValidBackup(parsed)) {
+          setImportError('このファイルはバックアップの形式ではないようです。');
+          return;
+        }
+        const ok = window.confirm('現在のデータはすべて上書きされます。読み込みますか？');
+        if (!ok) return;
+        restoreBackup(parsed);
+        window.location.reload();
+      } catch {
+        setImportError('ファイルを読み取れませんでした。JSON形式か確認してください。');
+      }
+    };
+    reader.readAsText(file);
   }
 
   return (
@@ -66,6 +102,40 @@ export default function SettingsPage() {
             <div className="text-[14.5px] font-bold">前回の結果を見る</div>
             <div className="text-xs text-coral font-bold">＞</div>
           </Link>
+        </Card>
+        <Card>
+          <div className="text-[14.5px] font-bold">データの書き出し・読み込み</div>
+          <div className="text-xs text-dim leading-relaxed">
+            記録はこの端末のブラウザにだけ保存されています。他の端末に移すときや、消える前の保険として使ってください。
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={exportData}
+              className="flex-grow h-10 rounded-xl bg-white border border-track text-[13px] font-bold text-coral"
+            >
+              書き出す
+            </button>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex-grow h-10 rounded-xl bg-white border border-track text-[13px] font-bold text-coral"
+            >
+              読み込む
+            </button>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) importData(file);
+              e.target.value = '';
+            }}
+          />
+          {importError && <div className="text-xs text-[#c1442a]">{importError}</div>}
         </Card>
       </div>
       <BottomNav active="settings" />

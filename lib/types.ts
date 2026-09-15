@@ -20,7 +20,12 @@ export type Theme = {
 export type PracticeRecord = {
   id: string;
   themeId: string;
-  stageId: string;
+  // 段階表の課題に紐づく記録は stageId を持つ。
+  // 予定外の出来事を自由記述で記録したときは null にし、freeText に内容を書く。
+  stageId: string | null;
+  freeText: string | null;
+  // 任意のひとことメモ。段階表つきの記録にも自由記述の記録にも使える。
+  memo: string | null;
   isImagined: boolean;
   anxietyBefore: number;
   anxietyAfter: number;

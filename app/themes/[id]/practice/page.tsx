@@ -24,6 +24,7 @@ export default function PracticePage({ params }: { params: { id: string } }) {
   const [before, setBefore] = useState<number | null>(null);
   const [after, setAfter] = useState<number | null>(null);
   const [isImagined, setIsImagined] = useState(false);
+  const [memo, setMemo] = useState('');
   const [saved, setSaved] = useState<PracticeRecord | null>(null);
 
   if (!theme) return null;
@@ -57,6 +58,8 @@ export default function PracticePage({ params }: { params: { id: string } }) {
       id: crypto.randomUUID(),
       themeId: id,
       stageId: now!.id,
+      freeText: null,
+      memo: memo.trim() || null,
       isImagined,
       anxietyBefore: before,
       anxietyAfter: after,
@@ -108,42 +111,57 @@ export default function PracticePage({ params }: { params: { id: string } }) {
       <div className="flex-grow px-4 pt-11 pb-2 flex flex-col gap-3.5">
         <div className="text-xl font-extrabold">実践を記録</div>
         {!saved ? (
-          <Card>
-            <div className="text-xs text-dim">
-              {theme.name} ／ 難しさ{now.level}
-            </div>
-            <div className="text-base font-extrabold">{now.name}</div>
-            <div className="flex gap-1.5">
+          <>
+            <Card>
+              <div className="text-xs text-dim">
+                {theme.name} ／ 難しさ{now.level}
+              </div>
+              <div className="text-base font-extrabold">{now.name}</div>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setIsImagined(false)}
+                  className={`flex-grow h-[38px] rounded-xl text-[12.5px] font-bold ${
+                    !isImagined ? 'bg-coral text-white' : 'bg-[#fff0e2] text-dim'
+                  }`}
+                >
+                  現実でやった
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsImagined(true)}
+                  className={`flex-grow h-[38px] rounded-xl text-[12.5px] font-bold ${
+                    isImagined ? 'bg-coral text-white' : 'bg-[#fff0e2] text-dim'
+                  }`}
+                >
+                  想像でやった
+                </button>
+              </div>
+              <AnxietyScale label="はじめる前の不安" value={before} onChange={setBefore} />
+              <AnxietyScale label="終わった後の不安" value={after} onChange={setAfter} />
+              <div className="flex flex-col gap-1.5">
+                <div className="text-[13px] text-dim font-bold">メモ（任意）</div>
+                <textarea
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value)}
+                  placeholder="例：声が少し震えたが、誰も気にしていなかった"
+                  rows={2}
+                  className="rounded-xl border border-track px-3 py-2 text-[13px] bg-white resize-none"
+                />
+              </div>
               <button
                 type="button"
-                onClick={() => setIsImagined(false)}
-                className={`flex-grow h-[38px] rounded-xl text-[12.5px] font-bold ${
-                  !isImagined ? 'bg-coral text-white' : 'bg-[#fff0e2] text-dim'
-                }`}
+                onClick={save}
+                disabled={!canSave}
+                className="h-[46px] rounded-[14px] bg-coral text-white font-extrabold disabled:opacity-40"
               >
-                現実でやった
+                {canSave ? '記録する' : '不安のスコアを2つとも選んでください'}
               </button>
-              <button
-                type="button"
-                onClick={() => setIsImagined(true)}
-                className={`flex-grow h-[38px] rounded-xl text-[12.5px] font-bold ${
-                  isImagined ? 'bg-coral text-white' : 'bg-[#fff0e2] text-dim'
-                }`}
-              >
-                想像でやった
-              </button>
-            </div>
-            <AnxietyScale label="はじめる前の不安" value={before} onChange={setBefore} />
-            <AnxietyScale label="終わった後の不安" value={after} onChange={setAfter} />
-            <button
-              type="button"
-              onClick={save}
-              disabled={!canSave}
-              className="h-[46px] rounded-[14px] bg-coral text-white font-extrabold disabled:opacity-40"
-            >
-              {canSave ? '記録する' : '不安のスコアを2つとも選んでください'}
-            </button>
-          </Card>
+            </Card>
+            <Link href={`/themes/${id}/practice/freeform`} className="text-center text-[12.5px] text-dim underline">
+              段階表にない、予定外の出来事を記録する
+            </Link>
+          </>
         ) : (
           <Card>
             <div className="text-[13.5px] leading-relaxed">

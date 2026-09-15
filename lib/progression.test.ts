@@ -1,11 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { meetsClearRequirement, isThemeUnlocked, isStageLocked } from './progression';
+import { meetsClearRequirement, isThemeUnlocked, isStageLocked, retreatOneStage } from './progression';
 import type { PracticeRecord, Stage, Theme } from './types';
 
 const rec = (over: Partial<PracticeRecord>): PracticeRecord => ({
   id: 'r',
   themeId: 't1',
   stageId: 's1',
+  freeText: null,
+  memo: null,
   isImagined: false,
   anxietyBefore: 6,
   anxietyAfter: 3,
@@ -53,6 +55,48 @@ describe('isThemeUnlocked', () => {
 
   it('記録がなければfalse', () => {
     expect(isThemeUnlocked([], 't1', 3)).toBe(false);
+  });
+
+  it('自由記述の記録（stageIdがnull）は数えない', () => {
+    const records = [
+      rec({ stageId: null, freeText: '急な会議', anxietyAfter: 1 }),
+      rec({ stageId: 's1', anxietyAfter: 3 }),
+      rec({ stageId: 's1', anxietyAfter: 2 }),
+    ];
+    // 自由記述を除くと2件しかないので、まだ解放条件を満たさない
+    expect(isThemeUnlocked(records, 't1', 3)).toBe(false);
+  });
+});
+
+describe('retreatOneStage', () => {
+  const stages: Stage[] = [
+    { id: 's1', level: 1, name: '段1', status: 'clear', order: 0 },
+    { id: 's2', level: 2, name: '段2', status: 'now', order: 1 },
+    { id: 's3', level: 3, name: '段3', status: 'todo', order: 2 },
+  ];
+  const theme: Theme = { id: 't1', name: 'テーマ', createdAt: '', updatedAt: '', ifThen: null, stages };
+
+  it('いまの段をtodoに、1つ前の段をnowに戻す', () => {
+    const next = retreatOneStage(theme);
+    const byId = Object.fromEntries(next.stages.map((s) => [s.id, s.status]));
+    expect(byId.s1).toBe('now');
+    expect(byId.s2).toBe('todo');
+    expect(byId.s3).toBe('todo');
+  });
+
+  it('先頭の段がnowのときは何もしない', () => {
+    const firstNow: Theme = {
+      ...theme,
+      stages: stages.map((s, i) => ({ ...s, status: i === 0 ? 'now' : 'todo' })),
+    };
+    const next = retreatOneStage(firstNow);
+    expect(next).toBe(firstNow);
+  });
+
+  it('nowの段が無い（全段クリア済み）ときは何もしない', () => {
+    const allClear: Theme = { ...theme, stages: stages.map((s) => ({ ...s, status: 'clear' })) };
+    const next = retreatOneStage(allClear);
+    expect(next).toBe(allClear);
   });
 });
 
