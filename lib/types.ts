@@ -18,6 +18,8 @@ export type Theme = {
   updatedAt: string;
   ifThen: { trigger: string; action: string } | null;
   stages: Stage[];
+  // 今は気にしなくてよいテーマをホームの一覧から隠す。記録は消えない。無い場合は表示扱い
+  hidden?: boolean;
 };
 
 export type PracticeRecord = {

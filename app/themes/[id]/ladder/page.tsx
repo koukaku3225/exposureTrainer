@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { BottomNav } from '@/components/ui/BottomNav';
@@ -8,11 +9,14 @@ import { useTheme } from '@/lib/useTheme';
 import { isStageLocked, retreatOneStage } from '@/lib/progression';
 import { getTaskOptions, getEditableTasks } from '@/lib/tasks';
 import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
+import { setThemeHidden } from '@/lib/themeVisibility';
 import type { Theme } from '@/lib/types';
 
 export default function LadderPage({ params }: { params: { id: string } }) {
   const { id } = params;
+  const router = useRouter();
   const { theme, records, refresh } = useTheme(id);
+  const [confirmingHide, setConfirmingHide] = useState(false);
   const [confirmingRetreat, setConfirmingRetreat] = useState(false);
   const [expandedStageId, setExpandedStageId] = useState<string | null>(null);
   if (!theme) return null;
@@ -28,6 +32,12 @@ export default function LadderPage({ params }: { params: { id: string } }) {
     writeList(STORAGE_KEYS.themes, next);
     setConfirmingRetreat(false);
     refresh();
+  }
+
+  function hideTheme() {
+    const themes = readList<Theme>(STORAGE_KEYS.themes);
+    writeList(STORAGE_KEYS.themes, setThemeHidden(themes, id, true, new Date().toISOString()));
+    router.push('/');
   }
 
   return (
@@ -127,6 +137,39 @@ export default function LadderPage({ params }: { params: { id: string } }) {
             )}
           </Card>
         )}
+        <Card>
+          {!confirmingHide ? (
+            <button
+              type="button"
+              onClick={() => setConfirmingHide(true)}
+              className="text-left text-[13px] text-dim underline"
+            >
+              今は気にしなくてよいので、このテーマを非表示にする
+            </button>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <div className="text-[13px] leading-relaxed">
+                ホームの一覧から隠します。これまでの記録は消えません。ホーム下部の「非表示のテーマ」からいつでも戻せます。
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={hideTheme}
+                  className="flex-grow h-10 rounded-xl bg-coral text-white text-[13px] font-bold"
+                >
+                  非表示にする
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingHide(false)}
+                  className="h-10 px-3 rounded-xl text-[13px] font-bold text-dim"
+                >
+                  やめる
+                </button>
+              </div>
+            </div>
+          )}
+        </Card>
       </div>
       <BottomNav active="ladder" themeId={id} />
     </div>
