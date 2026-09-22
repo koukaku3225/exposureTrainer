@@ -28,6 +28,9 @@ export type PracticeRecord = {
   // 段階表の課題に紐づく記録は stageId を持つ。
   // 予定外の出来事を自由記述で記録したときは null にし、freeText に内容を書く。
   stageId: string | null;
+  // イフゼンプランの「やった」から記録したときだけ、そのプランのidが入る。
+  // プランごとに「この場面で何回できたか」を数えるために使う
+  planId?: string | null;
   freeText: string | null;
   // 任意のひとことメモ。段階表つきの記録にも自由記述の記録にも使える。
   memo: string | null;

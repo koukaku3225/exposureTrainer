@@ -3,15 +3,16 @@ import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { BottomNav } from '@/components/ui/BottomNav';
-import { IfThenEditor } from '@/components/IfThenEditor';
 import { useTheme } from '@/lib/useTheme';
-import { readSettings } from '@/lib/storage';
+import { readList, readSettings, STORAGE_KEYS } from '@/lib/storage';
+import type { IfThenPlan } from '@/lib/plans';
 
 export default function ThemeDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const { theme, records, refresh } = useTheme(id);
+  const { theme, records } = useTheme(id);
 
   if (!theme) return null;
+  const themePlans = readList<IfThenPlan>(STORAGE_KEYS.plans).filter((p) => p.themeId === id && p.active);
   const settings = readSettings();
   const now = theme.stages.find((s) => s.status === 'now');
   const lastRecordForNow = now
@@ -44,7 +45,20 @@ export default function ThemeDetailPage({ params }: { params: { id: string } }) 
             </div>
           </Card>
         )}
-        <IfThenEditor themeId={id} ifThen={theme.ifThen} onSaved={refresh} />
+        <Link href="/plans">
+          <div className="bg-[#fff4e9] border-[1.5px] border-dashed border-[#ffcda3] rounded-2xl px-3.5 py-3 flex flex-col gap-1">
+            <div className="text-[11.5px] text-dim font-bold">イフゼンプラン</div>
+            {themePlans.length === 0 ? (
+              <div className="text-[12.5px] text-dim">＋ この課題をどの場面でやるか決める</div>
+            ) : (
+              themePlans.map((p) => (
+                <div key={p.id} className="text-[12.5px] leading-relaxed">
+                  <b>{p.trigger}</b> になったら → <b className="text-coral-dark">{p.action}</b>
+                </div>
+              ))
+            )}
+          </div>
+        </Link>
         {!now && (
           <Card>
             <div className="text-sm">このテーマは全段クリアしました。おめでとうございます！</div>

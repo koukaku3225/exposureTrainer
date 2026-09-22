@@ -3,6 +3,7 @@ import type { Settings } from './types';
 export const STORAGE_KEYS = {
   themes: 'exposure.themes',
   records: 'exposure.records',
+  plans: 'exposure.plans',
   fearChecks: 'exposure.fearChecks',
   settings: 'exposure.settings',
 } as const;

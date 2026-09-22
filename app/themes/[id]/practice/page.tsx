@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { AnxietyScale } from '@/components/ui/AnxietyScale';
@@ -21,6 +21,8 @@ const CHOICES = [
 export default function PracticePage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
+  // イフゼンプランの「やった」から来たときは、どのプラン由来の記録かを残す
+  const planId = useSearchParams().get('planId');
   const { theme, records, refresh } = useTheme(id);
   const [before, setBefore] = useState<number | null>(null);
   const [after, setAfter] = useState<number | null>(null);
@@ -63,6 +65,7 @@ export default function PracticePage({ params }: { params: { id: string } }) {
       id: crypto.randomUUID(),
       themeId: id,
       stageId: now!.id,
+      planId,
       // 3つの課題のうちどれを選んで挑んだかを残しておく
       freeText: selectedTask,
       memo: memo.trim() || null,
