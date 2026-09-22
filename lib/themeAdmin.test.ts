@@ -89,11 +89,20 @@ describe('createCustomTheme', () => {
     expect(created.stages.slice(1).every((s) => s.status === 'todo')).toBe(true);
   });
 
+  it('難易度1から10まで、10段そろって作られる', () => {
+    const created = createCustomTheme('テスト');
+    expect(created.stages.map((s) => s.level)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  });
+
   it('段は難しさ順に並び、それぞれ課題を3枠持つ', () => {
     const created = createCustomTheme('テスト');
-    expect(created.stages.length).toBeGreaterThan(1);
     expect(created.stages.map((s) => s.order)).toEqual(created.stages.map((_, i) => i));
-    expect(created.stages.every((s) => s.level >= 1 && s.tasks.length === 3)).toBe(true);
+    expect(created.stages.every((s) => s.tasks.length === 3)).toBe(true);
+  });
+
+  it('段の名前はすべて違う（段階表で見分けられるように）', () => {
+    const names = createCustomTheme('テスト').stages.map((s) => s.name);
+    expect(new Set(names).size).toBe(names.length);
   });
 
   it('テーマ名は段の名前にも入る（何のテーマか段階表で分かるように）', () => {

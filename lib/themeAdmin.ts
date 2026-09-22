@@ -1,21 +1,28 @@
 import type { PracticeRecord, Stage, Theme } from './types';
 
-// 自分で作ったテーマの初期の段。中身の課題はあとから自由に書き換える前提なので、
-// ここでは「小さく試す→ふつう→思い切って」の3段だけ用意する
-const CUSTOM_STAGES: { level: number; suffix: string }[] = [
-  { level: 1, suffix: 'をごく小さく試す' },
-  { level: 4, suffix: 'をふつうにやってみる' },
-  { level: 7, suffix: 'を思い切ってやる' },
+// 自分で作ったテーマの初期の段。同梱テーマと同じく難易度1〜10をひと通り用意する。
+// 中身の課題はあとから自由に書き換える前提なので、ここでは強さの段取りだけを示す
+const CUSTOM_STAGE_SUFFIXES = [
+  'を頭の中で思い描く',
+  'の準備だけしてみる',
+  'をごく小さく試す',
+  'を1回だけやってみる',
+  'をふつうにやってみる',
+  'を少し長く（多く）やる',
+  'を慣れない場面でやる',
+  'を思い切ってやる',
+  'をうまくいかない前提でやる',
+  'を本気でやりきる',
 ];
 
 export function createCustomTheme(rawName: string): Theme {
   const name = rawName.trim();
   const now = new Date().toISOString();
-  const stages: Stage[] = CUSTOM_STAGES.map((s, i) => {
-    const stageName = `${name}${s.suffix}`;
+  const stages: Stage[] = CUSTOM_STAGE_SUFFIXES.map((suffix, i) => {
+    const stageName = `${name}${suffix}`;
     return {
       id: crypto.randomUUID(),
-      level: s.level,
+      level: i + 1,
       name: stageName,
       tasks: [stageName, '', ''],
       status: i === 0 ? 'now' : 'todo',
