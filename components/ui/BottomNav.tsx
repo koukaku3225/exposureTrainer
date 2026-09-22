@@ -23,7 +23,15 @@ export function BottomNav({
   ];
 
   return (
-    <div className="h-[78px] box-border pb-3 border-t border-track grid grid-cols-5 bg-cream">
+    <>
+      {/* スマホのブラウザでは 100vh がアドレスバーの裏まで含むため、
+          流れの中に置くとバーが画面外に出てしまう。固定表示にして、
+          同じ高さの空きを流れに残し、最後の要素がバーに隠れないようにする */}
+      <div aria-hidden className="h-[78px] shrink-0" />
+      <div
+        className="fixed bottom-0 left-0 right-0 z-20 box-border pb-3 border-t border-track grid grid-cols-5 bg-cream"
+        style={{ height: 'calc(78px + env(safe-area-inset-bottom, 0px))' }}
+      >
       {items.map((item) => {
         const isActive = item.key === active;
         const className = `flex flex-col items-center justify-center gap-1 text-[10px] ${
@@ -42,6 +50,7 @@ export function BottomNav({
           </Link>
         );
       })}
-    </div>
+      </div>
+    </>
   );
 }

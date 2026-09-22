@@ -9,7 +9,7 @@ import { useTheme } from '@/lib/useTheme';
 import { isStageLocked, retreatOneStage } from '@/lib/progression';
 import { getTaskOptions, getEditableTasks } from '@/lib/tasks';
 import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
-import { setThemeHidden } from '@/lib/themeVisibility';
+import { setThemeHidden } from '@/lib/themeAdmin';
 import type { Theme } from '@/lib/types';
 
 export default function LadderPage({ params }: { params: { id: string } }) {
