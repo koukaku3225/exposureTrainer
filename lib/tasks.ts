@@ -16,6 +16,16 @@ export function getTaskOptions(stage: Stage): string[] {
   return filled.length > 0 ? filled : [stage.name];
 }
 
+/**
+ * 段のタイトル。課題1（空欄なら次に書いてある課題）をそのまま使う。
+ * 段の名前だけ編集できない画面は不便だ、という指摘を受けての方針で、
+ * 「課題1を書き換える＝タイトルを書き換える」にそろえている。
+ * どの課題も空欄なら、もとの stage.name をそのまま残す。
+ */
+export function getStageTitle(stage: Stage): string {
+  return getTaskOptions(stage)[0];
+}
+
 // 段階表の編集フォームを開くときの初期値。
 // tasks が無い（今回の機能より前に作られたテーマ）場合、フォームを空欄3つで
 // 開くと「課題1件」というヘッダー表示（getTaskOptionsがnameにフォールバックした結果）と

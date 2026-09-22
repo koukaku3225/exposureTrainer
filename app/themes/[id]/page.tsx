@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { useTheme } from '@/lib/useTheme';
+import { getStageTitle } from '@/lib/tasks';
 import { readList, readSettings, STORAGE_KEYS } from '@/lib/storage';
 import type { IfThenPlan } from '@/lib/plans';
 
@@ -40,7 +41,7 @@ export default function ThemeDetailPage({ params }: { params: { id: string } }) 
                 <div className="text-[11.5px] font-bold text-coral">
                   いまのステージ・{countForNow}/{settings.clearRequirement.count}回
                 </div>
-                <div className="text-[14.5px] font-extrabold">{now.name}</div>
+                <div className="text-[14.5px] font-extrabold">{getStageTitle(now)}</div>
               </div>
             </div>
           </Card>

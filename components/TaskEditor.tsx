@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { readList, writeList, STORAGE_KEYS } from '@/lib/storage';
-import { padTasks } from '@/lib/tasks';
+import { padTasks, getStageTitle } from '@/lib/tasks';
 import type { Theme } from '@/lib/types';
 
 // 段ごとに、実践のときに選べる課題を最大3件、自由に編集できるフォーム。
@@ -32,7 +32,13 @@ export function TaskEditor({
       if (t.id !== themeId) return t;
       return {
         ...t,
-        stages: t.stages.map((s) => (s.id === stageId ? { ...s, tasks: draft } : s)),
+        stages: t.stages.map((s) => {
+          if (s.id !== stageId) return s;
+          const updated = { ...s, tasks: draft };
+          // タイトルは課題1と連動させる。表示は getStageTitle が担うが、
+          // 書き出したデータ側もそろえておく
+          return { ...updated, name: getStageTitle(updated) };
+        }),
         updatedAt: new Date().toISOString(),
       };
     });
@@ -44,12 +50,13 @@ export function TaskEditor({
   return (
     <div className="flex flex-col gap-2 bg-[#fff8f0] rounded-xl px-3 py-3 border border-track">
       <div className="text-[11.5px] text-dim font-bold">課題のバリエーション（最大3件・自由に編集できます）</div>
+      <div className="text-[10.5px] text-dim">課題1が、この段のタイトルになります</div>
       {draft.map((t, i) => (
         <input
           key={i}
           value={t}
           onChange={(e) => updateSlot(i, e.target.value)}
-          placeholder={`課題 ${i + 1}（空欄でもよい）`}
+          placeholder={i === 0 ? '課題 1（この段のタイトルになります）' : `課題 ${i + 1}（空欄でもよい）`}
           className="rounded-lg border border-track px-2.5 py-1.5 text-[13px] bg-white"
         />
       ))}

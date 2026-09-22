@@ -7,7 +7,7 @@ import { BottomNav } from '@/components/ui/BottomNav';
 import { TaskEditor } from '@/components/TaskEditor';
 import { useTheme } from '@/lib/useTheme';
 import { isStageLocked, retreatOneStage } from '@/lib/progression';
-import { getTaskOptions, getEditableTasks } from '@/lib/tasks';
+import { getTaskOptions, getEditableTasks, getStageTitle } from '@/lib/tasks';
 import { readList, writeList, readSettings, STORAGE_KEYS } from '@/lib/storage';
 import { setThemeHidden } from '@/lib/themeAdmin';
 import type { Theme } from '@/lib/types';
@@ -66,7 +66,7 @@ export default function LadderPage({ params }: { params: { id: string } }) {
                         stage.status === 'now' ? 'font-bold' : ''
                       }`}
                     >
-                      {stage.name}
+                      {getStageTitle(stage)}
                     </div>
                     <div className="text-[11px] text-dim">
                       課題 {taskCount}件 ・ {expanded ? '閉じる ▲' : '編集する ▼'}
@@ -115,7 +115,7 @@ export default function LadderPage({ params }: { params: { id: string } }) {
             ) : (
               <div className="flex flex-col gap-2">
                 <div className="text-[13px] leading-relaxed">
-                  「{previousStage?.name}」に戻ります。いまの段はもう一度挑戦中に戻ります。
+                  「{previousStage ? getStageTitle(previousStage) : ''}」に戻ります。いまの段はもう一度挑戦中に戻ります。
                 </div>
                 <div className="flex gap-2">
                   <button

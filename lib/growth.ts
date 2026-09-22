@@ -1,4 +1,5 @@
 import type { PracticeRecord, Theme } from './types';
+import { getStageTitle } from './tasks';
 
 /**
  * 「あなたの森」に渡すデータ。
@@ -76,7 +77,7 @@ export function buildGrowth(themes: Theme[], records: PracticeRecord[]): GrowthM
       const stageRecords = themeRecords.filter((r) => r.stageId === stage.id).length;
       return {
         id: stage.id,
-        title: stage.name,
+        title: getStageTitle(stage),
         state: twigState(stage.status),
         maturity: clamp(0.15 + stageRecords / 3, 0.15, 1),
       };

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
+import { getStageTitle } from '@/lib/tasks';
 import { BottomNav } from '@/components/ui/BottomNav';
 import { readList, readSettings, writeList, STORAGE_KEYS } from '@/lib/storage';
 import { THEME_TEMPLATES, instantiateTheme } from '@/lib/themeTemplates';
@@ -109,7 +110,7 @@ export default function HomePage() {
                   {clearCount}/{theme.stages.length}段
                 </Chip>
               </div>
-              {now && <div className="text-[13px] text-dim">いま: {now.name}</div>}
+              {now && <div className="text-[13px] text-dim">いま: {getStageTitle(now)}</div>}
               {!now && <div className="text-[13px] text-amber-dark">全段クリア！</div>}
               {editing && (
                 <div className="flex gap-2 pt-1">

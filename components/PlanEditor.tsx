@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { readList, STORAGE_KEYS } from '@/lib/storage';
 import { createPlan, SLOTS, updatePlan } from '@/lib/plans';
 import type { IfThenPlan, TimeSlot } from '@/lib/plans';
-import { getTaskOptions } from '@/lib/tasks';
+import { getTaskOptions, getStageTitle } from '@/lib/tasks';
 import type { Theme } from '@/lib/types';
 
 // イフゼンプランの入力フォーム。plan が null なら新規作成。
@@ -91,7 +91,7 @@ export function PlanEditor({
           <option value="">段を選ばない</option>
           {stages.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.level}. {s.name}
+              {s.level}. {getStageTitle(s)}
               {s.status === 'now' ? '（挑戦中）' : ''}
             </option>
           ))}
