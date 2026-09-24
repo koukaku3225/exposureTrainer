@@ -16,6 +16,17 @@ npm run dev
 npm test
 ```
 
+## スマホアプリとして使う（PWA）
+
+下のタブ「設定」の一番上から入れられる。Android の Chrome はボタン1つ、
+iPhone は共有 →「ホーム画面に追加」。
+
+- iPhone では**ホーム画面のアプリと Safari で保存場所が別**。入れる前に「書き出す」で保存し、
+  アプリ側で「読み込む」こと（この案内は画面にも出る）
+- サービスワーカー（`public/sw.js`）は本番ビルドでだけ登録する。画面はネット優先、
+  `/_next/static/` だけキャッシュ優先。電波が無くても最後に開いた画面は出る
+- 詳細: `../prototypeManagementTool/docs/reports/2026-09-24-pwa.md`
+
 ## 設計
 
 - 設計書: [docs/superpowers/specs/2026-09-14-exposure-app-design.md](docs/superpowers/specs/2026-09-14-exposure-app-design.md)

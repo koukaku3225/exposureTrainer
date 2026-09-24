@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { BottomNav } from '@/components/ui/BottomNav';
+import { InstallCard } from '@/components/InstallCard';
 import { readSettings, writeSettings } from '@/lib/storage';
 import { buildBackup, restoreBackup, isValidBackup } from '@/lib/backup';
 import type { Settings } from '@/lib/types';
@@ -61,6 +62,8 @@ export default function SettingsPage() {
     <div className="min-h-screen flex flex-col bg-cream">
       <div className="flex-grow px-4 pt-11 pb-2 flex flex-col gap-3.5">
         <div className="text-xl font-extrabold">設定</div>
+        {/* アプリとして開いているときは何も出ない */}
+        <InstallCard />
         <Card>
           <div className="flex justify-between items-center py-1.5">
             <div className="flex flex-col">
